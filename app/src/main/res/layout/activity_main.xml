@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="0"
-        android:textColor="@android:black" />
+        android:textColor="@android:color/black" />
 
     <Button
         android:layout_width="wrap_content"
