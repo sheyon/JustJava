@@ -12,19 +12,27 @@ import java.text.NumberFormat;
  */
 public class MainActivity extends AppCompatActivity {
 
+    int quantity = 2;
+    int priceCoffee = 5;
+
+    TextView summaryTextView;
+    TextView quantityTextView;
+    TextView priceTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    int quantity = 2;
-    int priceCoffee = 5;
+        summaryTextView = (TextView) findViewById(R.id.summary_text_view);
+        quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
+        priceTextView = (TextView) findViewById(R.id.price_text_view);
+    }
 
     public void increment(View view)
     {
         quantity=quantity+1;
-        display(quantity);
+        displayQuantity(quantity);
     }
 
     public void decrement(View view)
@@ -32,31 +40,47 @@ public class MainActivity extends AppCompatActivity {
         if (quantity==0)
         {
             quantity = 0;
-            display(quantity);
+            displayQuantity(quantity);
         }
         else
         {
             quantity=quantity-1;
-            display(quantity);
+            displayQuantity(quantity);
         }
     }
 
     public void submitOrder(View view) {
-        displayPrice(quantity * priceCoffee);
+        int price = calculatePrice();
+        displayPrice(price);
+        createOrderSummary(price);
     }
 
-    private void display(int number) {
-        TextView quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
-        quantityTextView.setText("" + number);
+    public void resetOrder(View view)
+    {
+        quantity = 0;
+        displayQuantity(quantity);
+        resetSummary("Orders cleared!");
+    }
+
+    private int calculatePrice()
+    {
+        return quantity * priceCoffee;
+    }
+
+    private void createOrderSummary(int price)
+    {
+        summaryTextView.setText("Name: Person \nQuantity: " + quantity + "\nTotal: " + price + "\nThank you!");
+    }
+
+    private void displayQuantity(int numberOfCoffees) {
+        quantityTextView.setText("" + numberOfCoffees);
     }
 
     private void displayPrice(int number) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
         priceTextView.setText(NumberFormat.getCurrencyInstance().format(number));
     }
 
-    private void displayMessage(String message) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        priceTextView.setText(message);
+    private void resetSummary(String message) {
+        summaryTextView.setText(message);
     }
 }
