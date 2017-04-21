@@ -3,6 +3,7 @@ package com.example.android.justjava;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -14,10 +15,11 @@ public class MainActivity extends AppCompatActivity {
 
     int quantity = 2;
     int priceCoffee = 5;
+    boolean addCream;
 
     TextView summaryTextView;
     TextView quantityTextView;
-    TextView priceTextView;
+    CheckBox addCreamBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         summaryTextView = (TextView) findViewById(R.id.summary_text_view);
         quantityTextView = (TextView) findViewById(R.id.quantity_text_view);
-        priceTextView = (TextView) findViewById(R.id.price_text_view);
+        addCreamBox = (CheckBox) findViewById(R.id.add_cream_box);
     }
 
     public void increment(View view)
@@ -51,7 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void submitOrder(View view) {
         int price = calculatePrice();
-        displayPrice(price);
+
+        if (addCreamBox.isChecked())
+            addCream = true;
+        else
+            addCream = false;
+
         createOrderSummary(price);
     }
 
@@ -59,7 +66,11 @@ public class MainActivity extends AppCompatActivity {
     {
         quantity = 0;
         displayQuantity(quantity);
-        resetSummary("Orders cleared!");
+
+        addCream = false;
+        addCreamBox.setChecked(false);
+
+        resetSummary();
     }
 
     private int calculatePrice()
@@ -69,18 +80,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void createOrderSummary(int price)
     {
-        summaryTextView.setText("Name: Person \nQuantity: " + quantity + "\nTotal: " + price + "\nThank you!");
+        summaryTextView.setText("Name: Person \n" +
+                "Quantity: " + quantity + "\n" +
+                "Total: " + NumberFormat.getCurrencyInstance().format(price) + "\n" +
+                "Add Whipped cream? " + addCream + "\n" +
+                "Thank you!");
+    }
+
+    private void resetSummary() {
+        summaryTextView.setText("Orders reset!");
     }
 
     private void displayQuantity(int numberOfCoffees) {
         quantityTextView.setText("" + numberOfCoffees);
-    }
-
-    private void displayPrice(int number) {
-        priceTextView.setText(NumberFormat.getCurrencyInstance().format(number));
-    }
-
-    private void resetSummary(String message) {
-        summaryTextView.setText(message);
     }
 }
